@@ -1,0 +1,195 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+      <Schema Namespace="STLDatabaseModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="Authority">
+          <Key>
+            <PropertyRef Name="AuthorityId" />
+          </Key>
+          <Property Name="AuthorityId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Name" Type="nvarchar" MaxLength="100" Nullable="false" />
+        </EntityType>
+        <EntityType Name="DoubleBooking">
+          <Key>
+            <PropertyRef Name="DoubleBookingId" />
+          </Key>
+          <Property Name="DoubleBookingId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="BookingDate" Type="smalldatetime" Nullable="false" />
+          <Property Name="SearchClerkId" Type="int" Nullable="false" />
+          <Property Name="AuthorityId" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="SearchClerk">
+          <Key>
+            <PropertyRef Name="SearchClerkId" />
+          </Key>
+          <Property Name="SearchClerkId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Name" Type="nvarchar" MaxLength="100" Nullable="false" />
+          <Property Name="EmailAddress" Type="nvarchar" MaxLength="250" Nullable="false" />
+        </EntityType>
+        <Association Name="FK_DoubleBooking_Authority">
+          <End Role="Authority" Type="Self.Authority" Multiplicity="1" />
+          <End Role="DoubleBooking" Type="Self.DoubleBooking" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Authority">
+              <PropertyRef Name="AuthorityId" />
+            </Principal>
+            <Dependent Role="DoubleBooking">
+              <PropertyRef Name="AuthorityId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_DoubleBooking_SearchClerk">
+          <End Role="SearchClerk" Type="Self.SearchClerk" Multiplicity="1" />
+          <End Role="DoubleBooking" Type="Self.DoubleBooking" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="SearchClerk">
+              <PropertyRef Name="SearchClerkId" />
+            </Principal>
+            <Dependent Role="DoubleBooking">
+              <PropertyRef Name="SearchClerkId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="STLDatabaseModelStoreContainer">
+          <EntitySet Name="Authority" EntityType="Self.Authority" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="DoubleBooking" EntityType="Self.DoubleBooking" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="SearchClerk" EntityType="Self.SearchClerk" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="FK_DoubleBooking_Authority" Association="Self.FK_DoubleBooking_Authority">
+            <End Role="Authority" EntitySet="Authority" />
+            <End Role="DoubleBooking" EntitySet="DoubleBooking" />
+          </AssociationSet>
+          <AssociationSet Name="FK_DoubleBooking_SearchClerk" Association="Self.FK_DoubleBooking_SearchClerk">
+            <End Role="SearchClerk" EntitySet="SearchClerk" />
+            <End Role="DoubleBooking" EntitySet="DoubleBooking" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="STLDatabaseModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="Authority">
+          <Key>
+            <PropertyRef Name="AuthorityId" />
+          </Key>
+          <Property Name="AuthorityId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Name" Type="String" MaxLength="100" FixedLength="false" Unicode="true" Nullable="false" />
+          <NavigationProperty Name="DoubleBookings" Relationship="Self.FK_DoubleBooking_Authority" FromRole="Authority" ToRole="DoubleBooking" />
+        </EntityType>
+        <EntityType Name="DoubleBooking">
+          <Key>
+            <PropertyRef Name="DoubleBookingId" />
+          </Key>
+          <Property Name="DoubleBookingId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="BookingDate" Type="DateTime" Nullable="false" Precision="0" />
+          <Property Name="SearchClerkId" Type="Int32" Nullable="false" />
+          <Property Name="AuthorityId" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="Authority" Relationship="Self.FK_DoubleBooking_Authority" FromRole="DoubleBooking" ToRole="Authority" />
+          <NavigationProperty Name="SearchClerk" Relationship="Self.FK_DoubleBooking_SearchClerk" FromRole="DoubleBooking" ToRole="SearchClerk" />
+        </EntityType>
+        <EntityType Name="SearchClerk">
+          <Key>
+            <PropertyRef Name="SearchClerkId" />
+          </Key>
+          <Property Name="SearchClerkId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Name" Type="String" MaxLength="100" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="EmailAddress" Type="String" MaxLength="250" FixedLength="false" Unicode="true" Nullable="false" />
+          <NavigationProperty Name="DoubleBookings" Relationship="Self.FK_DoubleBooking_SearchClerk" FromRole="SearchClerk" ToRole="DoubleBooking" />
+        </EntityType>
+        <Association Name="FK_DoubleBooking_Authority">
+          <End Role="Authority" Type="Self.Authority" Multiplicity="1" />
+          <End Role="DoubleBooking" Type="Self.DoubleBooking" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Authority">
+              <PropertyRef Name="AuthorityId" />
+            </Principal>
+            <Dependent Role="DoubleBooking">
+              <PropertyRef Name="AuthorityId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_DoubleBooking_SearchClerk">
+          <End Role="SearchClerk" Type="Self.SearchClerk" Multiplicity="1" />
+          <End Role="DoubleBooking" Type="Self.DoubleBooking" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="SearchClerk">
+              <PropertyRef Name="SearchClerkId" />
+            </Principal>
+            <Dependent Role="DoubleBooking">
+              <PropertyRef Name="SearchClerkId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="STLDatabaseEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="Authorities" EntityType="Self.Authority" />
+          <EntitySet Name="DoubleBookings" EntityType="Self.DoubleBooking" />
+          <EntitySet Name="SearchClerks" EntityType="Self.SearchClerk" />
+          <AssociationSet Name="FK_DoubleBooking_Authority" Association="Self.FK_DoubleBooking_Authority">
+            <End Role="Authority" EntitySet="Authorities" />
+            <End Role="DoubleBooking" EntitySet="DoubleBookings" />
+          </AssociationSet>
+          <AssociationSet Name="FK_DoubleBooking_SearchClerk" Association="Self.FK_DoubleBooking_SearchClerk">
+            <End Role="SearchClerk" EntitySet="SearchClerks" />
+            <End Role="DoubleBooking" EntitySet="DoubleBookings" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="STLDatabaseModelStoreContainer" CdmEntityContainer="STLDatabaseEntities">
+          <EntitySetMapping Name="Authorities">
+            <EntityTypeMapping TypeName="STLDatabaseModel.Authority">
+              <MappingFragment StoreEntitySet="Authority">
+                <ScalarProperty Name="AuthorityId" ColumnName="AuthorityId" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="DoubleBookings">
+            <EntityTypeMapping TypeName="STLDatabaseModel.DoubleBooking">
+              <MappingFragment StoreEntitySet="DoubleBooking">
+                <ScalarProperty Name="DoubleBookingId" ColumnName="DoubleBookingId" />
+                <ScalarProperty Name="BookingDate" ColumnName="BookingDate" />
+                <ScalarProperty Name="SearchClerkId" ColumnName="SearchClerkId" />
+                <ScalarProperty Name="AuthorityId" ColumnName="AuthorityId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="SearchClerks">
+            <EntityTypeMapping TypeName="STLDatabaseModel.SearchClerk">
+              <MappingFragment StoreEntitySet="SearchClerk">
+                <ScalarProperty Name="SearchClerkId" ColumnName="SearchClerkId" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="EmailAddress" ColumnName="EmailAddress" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="true" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>
